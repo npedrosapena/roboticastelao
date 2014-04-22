@@ -544,7 +544,11 @@ module ultrasonicSensor()
 	union()
 	{
 		color("SILVER")
-			translate([0,0,0]) cylinder(r=16/2, h=13.8, $fn=50);
+		//****************MODIFICACION************************
+		//sumo +1 no diametro do cilindro, para darlle tolerancia:
+		//translate([0,0,0]) cylinder(r=16/2, h=13.8, $fn=50);
+		
+			translate([0,0,0]) cylinder(r=(16+1)/2, h=13.8, $fn=50);
 			}
 }
 module xtal()
