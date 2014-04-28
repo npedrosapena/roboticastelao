@@ -315,46 +315,52 @@ clonewars_id( printer_name = "RobotiCastelao",  plate_size = [110, 30, 0]);
 
 //---------------------------------------------------------
 //-- Robot top part. It includes drills for 2 boards:
-//--   -skymega
+//--   -skymega comentados 
 //--   -Arduino UNO
+//--	Modificado para un so burato pasacables e taladros para arduino
 //--------------------------------------------------------
 module top_plate_arduino_uno()
 {
+	
+
   trans1 = [(top_plate_c1)/2-rear_c1-nut_radius-1,
-
-//*************************************************
-//**************MODIFICACION*************************
-//***********************************************
-//**********modificacion para encaixar buratos da placa
-//        -(top_plate_c2)/2+nut_radius+1 
-             -(top_plate_c2-20)/2+nut_radius+1   
-
+             -(top_plate_c2-20)/2+nut_radius+1
              ,0];
 
-
-
   trans2 = [(top_plate_c1)/2 - rear_c1,
-           (rear_c2)/2,
+           rear_c2/2,
            top_plate_thickness/2+servo_c1];
 
   translate(trans2)
   translate(-trans1)
+ 
+	
   difference() {
     translate(trans1)
     difference() {
     
       //-- main plate
       roundedBox([top_plate_c1, top_plate_c2, top_plate_thickness],
-     
                   r=frame_corner_radius);
 
-      //-- First cutout
-      translate([-(front_c1+5)/2+(top_plate_c1)/2-front_thickness-2-4,0,0])
-      roundedBox([front_c1+5-4, battery_c2-2*battery_ear_diam, rear_c3+10],
-               r=frame_corner_radius);
+      //-- Burato pasacables.
+      translate([2,0,0])
+      roundedBox([top_plate_c1/2, battery_c2-2*battery_ear_diam, rear_c3+10],
+              r=frame_corner_radius);
+		
+		//translate([-(top_plate_c1-skymega_lx)/2 + 3,0,0])
+		//roundedBox([2*skymega_dx-10, top_plate_c2-20,top_plate_thickness+10],frame_corner_radius,true,$fn=20);
 
-      //-- Skymega drills
-      translate([-(top_plate_c1-skymega_lx)/2 + 3,0,0])
+   /* //-- Arduino drill 1 (top-left)
+    cylinder(r=drill_M3/2, h=top_plate_thickness+10,center=true, $fn=8);
+   
+    //-- Captive nut for drill 1
+    translate([0, 0,-top_plate_thickness+nut_h])
+    cylinder(r=nut_radius, h=top_plate_thickness,center=true,$fn=6);
+*/
+
+    /*  //-- Skymega drills
+      
       union() {
       translate([skymega_dx, skymega_dy,0])
         cylinder(r=drill_M3/2, h=20, center=true, $fn=20);
@@ -369,12 +375,11 @@ module top_plate_arduino_uno()
         cylinder(r=drill_M3/2, h=20, center=true, $fn=20);
 
         //-- Second cutout
-      roundedBox([2*skymega_dx-10, top_plate_c2-20,top_plate_thickness
- 
-+10],frame_corner_radius,true,$fn=20);
-      }
+      
+      }*/
+		
 
-      //-- Captive nuts for the skymega
+  /*    //-- Captive nuts for the skymega
       translate([-(top_plate_c1-skymega_lx)/2 + 3,0,0])
       union() {
         translate([skymega_dx, skymega_dy,-top_plate_thickness+nut_h])
@@ -389,37 +394,45 @@ module top_plate_arduino_uno()
         translate([-skymega_dx, -skymega_dy,-top_plate_thickness+nut_h])
         cylinder(r=nut_radius, h=top_plate_thickness,center=true,$fn=6);
       }
+*/
     }
-    //-- Arduino drill 1 (top-left)
+   
+	//-- Arduino drill 1 (bottom-right)
+	//situamonos no centro
+    translate(trans1+[-24.1,-21.8,0])
     cylinder(r=drill_M3/2, h=top_plate_thickness+10,center=true, $fn=8);
 
-    //-- Captive nut for drill 1
-    translate([0, 0,-top_plate_thickness+nut_h])
+  	 translate(trans1+[-24.1,-21.8,-top_plate_thickness+nut_h])
     cylinder(r=nut_radius, h=top_plate_thickness,center=true,$fn=6);
 
-    //-- Arduino drill 2 (bottom-left)
-    translate([-1.1,-48.4,0])
+   //-- Arduino drill 2 (bottom-left)
+    translate(trans1+[24.1,-23.1,0])
     cylinder(r=drill_M3/2, h=top_plate_thickness+10,center=true, $fn=8);
 
     //-- Captive nut for drill 2
-    translate([-1.1,-48.4,-top_plate_thickness+nut_h])
+    translate(trans1+[24.1,-23.1,-top_plate_thickness+nut_h])
     cylinder(r=nut_radius, h=top_plate_thickness,center=true,$fn=6);
 
     //-- Arduino drill 3 (top-right)
-    translate([51,-15.3,0])
+    translate(trans1+[-8.9,29,0])
     cylinder(r=drill_M3/2, h=top_plate_thickness+10,center=true, $fn=8);
 
     //-- Captive nut for drill 3
-    translate([51,-15.3,-top_plate_thickness+nut_h])
+    translate(trans1+[-8.9,29,-top_plate_thickness+nut_h])
     cylinder(r=nut_radius, h=top_plate_thickness,center=true,$fn=6);
 
     //-- Arduino drill 4 (bottom-right)
-    //translate([51,-43.3,0])
-    //cylinder(r=drill_M3/2, h=top_plate_thickness+10,center=true, $fn=8);
+    translate(trans1+[19,29,0])
+    cylinder(r=drill_M3/2, h=top_plate_thickness+10,center=true, $fn=8);
+	
+	translate(trans1+[19,29,-top_plate_thickness+nut_h])
+    cylinder(r=nut_radius, h=top_plate_thickness,center=true,$fn=6);
 
+	
   }
     
 }
+
 
 
 //-------------------------------------
@@ -433,7 +446,7 @@ difference(){
     front_part();
     rear_part();
 //translate([battery_c1-front_c1+20*5,rear_c2/2-(45/2),servo_c1-ultrasound_hole/2-11.5])xtal();
-  };
+  }
 ultrasensor();
 }
 }
